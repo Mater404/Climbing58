@@ -46,4 +46,15 @@ public class Save58html {
 		}
     	return date58;
 	}
+	//获取验证页面
+	public static boolean GetVerify(Document doc) {
+		//获取指定区域的DOM
+    	Elements elements1 = doc.select("[class=pop]");
+    	
+    	Elements title = elements1.select("p.title");	//获取名字
+    	if(title.size() != 0 ){
+    		return true;
+    	}
+    	return false;
+	}
 }

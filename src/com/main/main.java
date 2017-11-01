@@ -24,7 +24,7 @@ import com.util.Save58html;
 
 public class main {
 
-	public static void main(String[] args) throws InterruptedException {
+	public static void main(String[] args) throws InterruptedException, IOException {
 		// TODO Auto-generated method stub
 		/*
 		 * *
@@ -38,18 +38,20 @@ public class main {
 		 * 宝安	baoan
 		 * 龙岗 longgang
 		 */
-		String project = "ZHUZHAI_LH_BUILD_1710201129";
-		init(project,"luohu",0);
+		String project = "ZHUZHAI_NS_BUILD_1710301106";
+		init(project,"nanshan",0);
 	}
 
-	private static void init(String project,String fq , int i) throws InterruptedException {
+	private static void init(String project,String fq , int i) throws InterruptedException, IOException {
 		// TODO Auto-generated method stub
 		Document doc = null;
 		OperateOracle oo=new OperateOracle();
 		List<DBbuild> list = oo.se(project);
+		boolean ZT = true; 	//状态
 		int pq=0;
-        for (; i < 50; i++) {
+        for (; i < list.size(); i++) {
 			Thread.sleep(500);	//休息5毫秒
+//        	System.out.println(i);
 			String url = geturl(list.get(i).getBldg_name(),fq);	//拼接url
         	try {
         		doc = Jsoup.connect(url).userAgent("Mozilla").get();  //获取网页
@@ -63,6 +65,19 @@ public class main {
         	//DOM数据处理
         	List<Html58build> date58 = new ArrayList<Html58build>();
         	date58 = Save58html.Handlehtml(doc);
+        	
+        	
+        	//检查是否被封
+        	if(Save58html.GetVerify(doc)){
+        		if(ZT){
+        			//打开浏览器
+            		Runtime.getRuntime().exec("rundll32 url.dll,FileProtocolHandler http://sz.58.com/zufang/?key=ggbh");
+            		ZT = false;
+        		}
+        		i--;
+        		continue;
+        	}
+        	ZT = true;
         	//计算平均值
         	double AVG58 = CnAVG.cn58Avg(date58);
         	//存入数据
@@ -76,7 +91,7 @@ public class main {
 		}
 	}
 
-	
+	//拼接url
 	private static String geturl(String name,String fq) {
 		String url = "http://sz.58.com/"+fq+"/zufang/0/?key="+name+"";
 		return url;
