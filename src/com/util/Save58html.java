@@ -52,9 +52,9 @@ public class Save58html {
     	Elements elements1 = doc.select("[class=pop]");
     	
     	Elements title = elements1.select("p.title");	//获取名字
-    	if(title.size() != 0 ){
-    		return true;
+    	if(title.size() == 0 ){
+    		return false;
     	}
-    	return false;
+		return true;
 	}
 }

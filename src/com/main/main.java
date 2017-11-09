@@ -29,8 +29,8 @@ public class main {
 		/*
 		 * *
 		 * 1.传入项目名
-		 * 2.步数
-		 * 3.传入分区代码
+		 * 2.传入分区代码
+		 * 3.步数
 		 * 罗湖	luohu
 		 * 福田	futian
 		 * 南山	nanshan
@@ -38,10 +38,11 @@ public class main {
 		 * 宝安	baoan
 		 * 龙岗 longgang
 		 */
-		String project = "ZHUZHAI_NS_BUILD_1710301106";
-		init(project,"nanshan",0);
+		String project = "ZHUZHAI_BA_BUILD_1711081656";
+		init(project,"baoan",0);
+//		dxcs("http://sz.58.com/zufang/0/?key=%E4%B8%AD%E4%BF%A1%E7%BA%A2%E6%A0%91%E6%B9%BE&PGTID=0d300008-0000-44bd-7ce0-7a9410149910&ClickID=3");
 	}
-
+	
 	private static void init(String project,String fq , int i) throws InterruptedException, IOException {
 		// TODO Auto-generated method stub
 		Document doc = null;
@@ -58,8 +59,9 @@ public class main {
     			System.out.println(url);
         	} catch (IOException e) {
     			// TODO Auto-generated catch block
-    			System.out.println("网络异常");
-    			e.printStackTrace();
+    			System.out.println("网络异常! 正在重新连接...");
+    			i--;
+    			continue;
     		}
         	
         	//DOM数据处理
@@ -89,6 +91,35 @@ public class main {
     			Thread.sleep(15000);		//休息时间
     		}
 		}
+	}
+	
+	/**
+	 * 
+	* @Title: 单项测试   
+	* @Description: TODO
+	* @param 
+	* @return void
+	* @throws
+	 */
+	private static void dxcs(String url) {
+		Document doc = null;
+    	try {
+    		doc = Jsoup.connect(url).userAgent("Mozilla").get();  //获取网页
+			System.out.println(url);
+    	} catch (IOException e) {
+			// TODO Auto-generated catch block
+			System.out.println("网络异常");
+			e.printStackTrace();
+		}
+    	
+    	//DOM数据处理
+    	List<Html58build> date58 = new ArrayList<Html58build>();
+    	date58 = Save58html.Handlehtml(doc);
+    	
+    	//计算平均值
+    	double AVG58 = CnAVG.cn58Avg(date58);
+    	
+    	System.out.println(AVG58);
 	}
 
 	//拼接url

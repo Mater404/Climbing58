@@ -72,20 +72,13 @@ public class OperateOracle {
         connection = getConnection();
         // String sql =
         // "insert into student values('1','王小军','1','17','北京市和平里七区30号楼7门102')";
-        String sqlStr = "insert into date58avg values(?,?,?,?,?,?,?,?,?)";
+        String sqlStr = "insert into date58avg values(?,?,?,?,?,?,?,?,?,?,?)";
         int count = 0;
 
         try {
             // 执行插入数据操作
             pstm = connection.prepareStatement(sqlStr);
             
-//            System.out.println(da58avg.getBldg_no());
-//            System.out.println(da58avg.getBldg_name());
-//            System.out.println(da58avg.getZj_avg_price());
-//            System.out.println(da58avg.getZj_avg_price_u());
-//            System.out.println(da58avg.getName58());
-//            System.out.println(da58avg.getAvg58());
-//            System.out.println(da58avg.getMoney58());
             pstm.setString(1, da58avg.getBldg_no());
             pstm.setString(2, da58avg.getBldg_name());
             pstm.setString(3, da58avg.getZone_no());
@@ -94,8 +87,9 @@ public class OperateOracle {
             pstm.setString(6, da58avg.getName58());
             pstm.setString(7, da58avg.getAvg58());
             pstm.setString(8, da58avg.getMoney58());
-            pstm.setString(9, da58avg.getHx58());
-            
+            pstm.setString(9, "2017-09-01");
+            pstm.setString(10, da58avg.getHx58());
+            pstm.setString(11, "住宅");
             
             pstm.executeUpdate();
         } catch (SQLException e) {
