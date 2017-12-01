@@ -87,7 +87,7 @@ public class OperateOracle {
             pstm.setString(6, da58avg.getName58());
             pstm.setString(7, da58avg.getAvg58());
             pstm.setString(8, da58avg.getMoney58());
-            pstm.setString(9, "2017-09-01");
+            pstm.setString(9, "2017-10-01");
             pstm.setString(10, da58avg.getHx58());
             pstm.setString(11, "住宅");
             
@@ -118,7 +118,25 @@ public class OperateOracle {
             ReleaseResource();
         }
     }
-    
+    /**
+     * 删除没有匹配上的数据
+     * @param stuName:根据姓名删除数据
+     */
+    public void DeleteDataAVG58(String ID) {
+        connection = getConnection();
+        String sqlStr = "delete from date58avg where BLDG_NO=?";
+//       System.out.println(sqlStr);
+        try {
+            // 执行删除数据操作
+            pstm = connection.prepareStatement(sqlStr);
+            pstm.setString(1, ID);
+            pstm.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            ReleaseResource();
+        }
+    }
     /**
      * 向数据库中修改数据
      * @param stuName:学生姓名,根据此值查询要修改的某行值
@@ -200,6 +218,40 @@ public class OperateOracle {
             	build.setZone_no(rs.getString("zone_no"));
             	build.setZj_avg_price(rs.getString("zj_avg_price"));
             	build.setZj_avg_price_u(rs.getString("zj_avg_price_u"));
+            	list.add(build);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            ReleaseResource();
+        }
+        return list;
+    }
+    /**
+     * 
+    * @Title: se58   
+    * @Description: TODO
+    * @param @param project
+    * @param @return
+    * @return List<DBbuild>
+    * @throws
+     */
+    public List<DBbuild> se58(String project) {
+        connection = getConnection();
+//        String sql = "select bldg_no,bldg_name from ZHUZHAI_LH_BUILD_1710201129  order by bldg_name";
+//        String sql = "select bldg_no,bldg_name,zj_avg_price,zj_avg_price_u  from "+project+" where rownum < 100 order by bldg_name";
+        String sql = "select BLDG_NO,BLDG_NAME,NAME58  from "+project+" order by bldg_name";
+        List<DBbuild> list = new ArrayList<DBbuild>();
+        
+        try {
+            pstm = connection.prepareStatement(sql);
+            rs = pstm.executeQuery();
+            while (rs.next()) {
+            	DBbuild build = new DBbuild();
+                
+            	build.setBldg_no(rs.getString("bldg_no"));
+            	build.setBldg_name(rs.getString("bldg_name"));
+            	build.setName58(rs.getString("name58"));
             	list.add(build);
             }
         } catch (SQLException e) {

@@ -14,6 +14,7 @@ import org.jsoup.select.Elements;
 
 
 
+
 import com.dao.OperateOracle;
 import com.ov.DBbuild;
 import com.ov.Html58build;
@@ -38,8 +39,8 @@ public class main {
 		 * 宝安	baoan
 		 * 龙岗 longgang
 		 */
-		String project = "ZHUZHAI_BA_BUILD_1711081656";
-		init(project,"baoan",0);
+		String project = "ZHUZHAI_LG_BUILD_1711091203";
+		init(project,"longgang",0);
 //		dxcs("http://sz.58.com/zufang/0/?key=%E4%B8%AD%E4%BF%A1%E7%BA%A2%E6%A0%91%E6%B9%BE&PGTID=0d300008-0000-44bd-7ce0-7a9410149910&ClickID=3");
 	}
 	
@@ -50,6 +51,8 @@ public class main {
 		List<DBbuild> list = oo.se(project);
 		boolean ZT = true; 	//状态
 		int pq=0;
+		String A;	//待拆分数据
+		String B;	//匹配数据
         for (; i < list.size(); i++) {
 			Thread.sleep(500);	//休息5毫秒
 //        	System.out.println(i);
@@ -82,8 +85,15 @@ public class main {
         	ZT = true;
         	//计算平均值
         	double AVG58 = CnAVG.cn58Avg(date58);
-        	//存入数据
-        	DBadd58.dbadd(list, i, date58, AVG58);
+        	
+        	A = date58.get(0).getName();
+			B = list.get(i).getBldg_name();
+        	//匹配数据
+        	if(B.contains(A.substring(0,2))){
+        		//存入数据
+        		DBadd58.dbadd(list, i, date58, AVG58);
+        	}
+        	
     		System.out.println("当前进度:"+i+"/"+list.size()+" 爬取进度："+pq+++"/200");
     		if(pq>=200){
     			pq=0;
